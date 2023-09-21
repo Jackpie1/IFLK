@@ -2,7 +2,6 @@ package hafen;
 
 import java.util.Arrays;
 
-import org.jcp.xml.dsig.internal.dom.DOMXMLObject;
 
 import gui.GUI;
 
