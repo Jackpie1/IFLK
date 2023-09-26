@@ -1,5 +1,7 @@
 package bacheloristin;
 
+import java.sql.Date;
+
 import gui.GUI;
 import linear.List;
 import linear.ListWithViewer;
@@ -53,7 +55,7 @@ public class BacheloristinStaffel {
 		if(jungsListe== null) {
 			return result;
 		}
-		
+
 		jungsListe.toFirst();
 		while(jungsListe.hasAccess()) {
 			if(!jungsListe.getContent().isNochDabei()) {
@@ -74,6 +76,7 @@ public class BacheloristinStaffel {
 		while(jungsListe.hasAccess()) {
 			if(jungsListe.getContent().getName().equals(pNameWer)) {
 				jungsListe.getContent().erhöheQuotenPunkte(20);
+				break;
 			}
 			jungsListe.next();
 		}
@@ -81,6 +84,7 @@ public class BacheloristinStaffel {
 		while(jungsListe.hasAccess()) {
 			if(jungsListe.getContent().getName().equals(pNameUeberWen)) {
 				jungsListe.getContent().erhöheQuotenPunkte(10);
+				break;
 			}
 			jungsListe.next();
 		}
@@ -95,16 +99,57 @@ public class BacheloristinStaffel {
 		while(jungsListe.hasAccess()) {
 			if(jungsListe.getContent().getName().equals(pName)) {
 				jungsListe.getContent().erhöheQuotenPunkte(50);
+				return;
 			}
 			jungsListe.next();
 		}
 	}
 
 
-	// TODO: Teil 2: Aufgabe f) gibQuotenLetzten
+	public Kandidat gibQuotenLetzten() {
+		if(jungsListe== null) {
+			return null;
+		}
+		jungsListe.toFirst();
+		Kandidat result = jungsListe.getContent();
+		while(jungsListe.hasAccess()) {
+			if(jungsListe.getContent().getQuotenPunkte()<result.getQuotenPunkte()) {
+				result = jungsListe.getContent();
+			}
+			jungsListe.next();
+		}
+		return result;
+	}
 
+	public int getDate() {
+		long m= System.currentTimeMillis();
+		Date date= new Date(m);
+		String s = date.toString();
+		s = s.replaceAll("-","");
+		return Integer.parseInt(s);
+	}
 
-	// TODO: Teil 2: Aufgabe g) gibRentnerListe
+	public int getAlter(Kandidat pKandidat) {
+		int d = getDate();
+		return d-=pKandidat.getGebDatum();
+	}
+
+	public List<Kandidat> gibRentnerListe() {
+		if(jungsListe== null) {
+			return null;
+		}
+		ListWithViewer<Kandidat> nL = new ListWithViewer<>();
+		jungsListe.toFirst();
+		while(jungsListe.hasAccess()) {
+			Kandidat k = jungsListe.getContent();
+			if(getAlter(k)>300000) {
+				nL.append(k);
+			}
+			jungsListe.next();
+		}
+		return nL;
+	}
+	
 
 
 
