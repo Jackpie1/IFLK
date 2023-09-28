@@ -5,7 +5,7 @@ import hafen.Container;
 import linear.ListWithViewer;
 
 public class Staffeln {
-	private ListWithViewer<BacheloristinStaffel> staffelList;
+	private ListWithViewer<BacheloristinStaffel> staffelList = new ListWithViewer<>();
 	
 public Staffeln() {
 	BacheloristinStaffel b2019 = new BacheloristinStaffel(2019);
@@ -15,8 +15,25 @@ public Staffeln() {
 	BacheloristinStaffel b2017 = new BacheloristinStaffel(2017);
 	staffelList.append(b2017);
 }
+
+public boolean warKandidatDabei(String pKandidatName) {
+	if(staffelList == null) {
+		return false;
+	}
+	staffelList.toFirst();
+	while(staffelList.hasAccess()) {
+		boolean a = staffelList.getContent().isKandidat(pKandidatName);
+		if (a == true) {
+			return true;
+		}
+		staffelList.next();
+	}
+	return false;
+}
+
 public static void main(String[] args) {
 	Staffeln tb= new Staffeln();
 	new GUI(tb);
 }
 }
+

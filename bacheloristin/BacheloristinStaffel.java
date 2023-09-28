@@ -38,7 +38,20 @@ public class BacheloristinStaffel {
 		pKandidat.fliegtRaus();
 	}
 
-
+	public boolean isKandidat(String pKandidatName) {
+		if(jungsListe== null) {
+			return false;
+		}
+		jungsListe.toFirst();
+		while(jungsListe.hasAccess()) {
+			if(pKandidatName.equals(jungsListe.getContent().getName())) {
+				return true;
+			}
+			jungsListe.next();
+		}
+		return false;
+	}
+	
 	public void alleResetten() {
 		if(jungsListe== null) {
 			return;
