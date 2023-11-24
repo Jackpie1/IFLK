@@ -16,24 +16,23 @@ public class QuicksortTest {
 		anzahlVergleiche = 0;
 	}
 
-	public ListWithViewer<String> quicksort(List<String> pStrings){
+	public List<String> quicksort(List<String> pStrings){
 		if (pStrings.isEmpty()) {
-			return null;
+			return (List<String>) pStrings;
 		}
 		pStrings.toFirst();
 		pStrings.next();
 		if(!pStrings.hasAccess()) {
-			return (ListWithViewer<String>)pStrings;
+			return (List<String>)pStrings;
 		}
-		ListWithViewer<String> linkeListe= new ListWithViewer<>();
-		ListWithViewer<String> rechteListe= new ListWithViewer<>();
-		ListWithViewer<String> ergebnis = new ListWithViewer<String>();
+		List<String> linkeListe= new List<String>();
+		List<String> rechteListe= new List<String>();
 		pStrings.toFirst();
 		String pivot = pStrings.getContent();
 		pStrings.remove();
 		
 		while(pStrings.hasAccess()) {
-			if(pStrings.getContent().compareTo(pivot)>=0) {
+			if(pStrings.getContent().compareTo(pivot)<=0) {
 				linkeListe.append(pStrings.getContent());
 				pStrings.remove();
 			}
@@ -44,7 +43,10 @@ public class QuicksortTest {
 		}
 		quicksort(linkeListe);
 		quicksort(rechteListe);
-		return ergebnis;		
+		pStrings.concat(linkeListe);
+		pStrings.append(pivot);
+		pStrings.concat(rechteListe);
+		return pStrings;		
 	}
 
 	public void quicksortTestKlein(){
@@ -56,6 +58,7 @@ public class QuicksortTest {
 		avengers.append("Spider Man");
 		avengers.append("Black Widow");
 		List<String> ergebnis = quicksort(avengers);
+		ausgeben(ergebnis);
 	}
 
 	public void quicksortTestGross(int pAnzahl){
@@ -63,6 +66,75 @@ public class QuicksortTest {
 		List<String>strings = erzeugen(pAnzahl);
 		long startzeit = System.currentTimeMillis();
 		List<String> ergebnis = quicksort(strings);
+		long endzeit = System.currentTimeMillis();
+		ausgeben(ergebnis);
+		long verbrauchteZeit = endzeit - startzeit; 
+		System.out.println("+++ Zeitverbrauch: "+verbrauchteZeit+"ms +++");
+		System.out.println("+++ Anzahl Vergleiche: "+anzahlVergleiche);
+	}
+	
+	public List<String> mergesort(List<String> pStrings){
+		if (pStrings.isEmpty()) {
+			return (List<String>) pStrings;
+		}
+		pStrings.toFirst();
+		pStrings.next();
+		if(!pStrings.hasAccess()) {
+			return (List<String>)pStrings;
+		}
+		List<String> ergebnisListe= new List<String>();
+		List<String> linkeListe= new List<String>();
+		List<String> rechteListe= new List<String>();
+		pStrings.toFirst();
+		String pivot = pStrings.getContent();
+		pStrings.remove();
+		pStrings.toFirst();
+		while(pStrings.hasAccess()) {
+			linkeListe.append(pStrings.getContent());
+			pStrings.remove();
+			if(pStrings.hasAccess()) {
+			rechteListe.append(pStrings.getContent());
+			pStrings.remove();		
+		}
+	}
+		mergesort(linkeListe);
+		mergesort(rechteListe);
+		
+		while (rechteListe.hasAccess() && linkeListe.hasAccess()) {
+			linkeListe.toFirst();
+			rechteListe.toFirst();
+			if(linkeListe.getContent().compareTo(rechteListe.getContent())<=0) {
+				ergebnisListe.append(linkeListe.getContent());
+				linkeListe.remove();
+			}
+			else {
+				ergebnisListe.append(rechteListe.getContent());
+				rechteListe.remove();
+			}
+		}
+		ergebnisListe.concat(linkeListe);
+		ergebnisListe.concat(rechteListe);
+		return ergebnisListe;
+		}		
+
+	
+	public void mergesortTestKlein(){
+		anzahlVergleiche = 0;
+		avengers = new ListWithViewer<String>();
+		avengers.append("Iron Man");
+		avengers.append("Captain America");
+		avengers.append("Thor");
+		avengers.append("Spider Man");
+		avengers.append("Black Widow");
+		List<String> ergebnis = mergesort(avengers);
+		ausgeben(ergebnis);
+	}
+
+	public void mergesortTestGross(int pAnzahl){
+		anzahlVergleiche = 0;
+		List<String>strings = erzeugen(pAnzahl);
+		long startzeit = System.currentTimeMillis();
+		List<String> ergebnis = mergesort(strings);
 		long endzeit = System.currentTimeMillis();
 		ausgeben(ergebnis);
 		long verbrauchteZeit = endzeit - startzeit; 
